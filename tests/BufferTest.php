@@ -89,6 +89,27 @@ class BufferTest extends TestCase
         $this->assertInstanceOf(\GMP::class, $buffer->getGmp());
     }
 
+    public function testSerialize2()
+    {
+        $hex = '12a05f200'; // 5e9
+        $dec = gmp_strval(gmp_init($hex, 16), 10);
+        $bin = pack("H*", $hex);
+        // $unpacked = unpack("H*", $bin); // [1] => 12a05f2000 <- 5e10
+        // error_log('$unpacked = ' . print_r($unpacked, true));
+        $buffer = Buffer::hex($hex);
+
+        // Check Binary
+        $retBinary = $buffer->getBinary();
+        $this->assertSame($bin, $retBinary);
+
+        // Check Hex
+        $this->assertSame($hex, $buffer->getHex());
+
+        // Check Decimal
+        $this->assertSame($dec, $buffer->getInt());
+        $this->assertInstanceOf(\GMP::class, $buffer->getGmp());
+    }
+
     public function testGetSize()
     {
         $this->assertEquals(1, Buffer::hex('41')->getSize());
@@ -102,9 +123,9 @@ class BufferTest extends TestCase
     public function getIntVectors(): array
     {
         return [
-            ['1',  '01', 1,   ],
+            ['1',  '01', 1,],
             ['1',  '01', null,],
-            ['20', '14', 1,   ]
+            ['20', '14', 1,]
         ];
     }
 
@@ -126,8 +147,8 @@ class BufferTest extends TestCase
     public function getGmpVectors(): array
     {
         return [
-            [ gmp_init('0A', 16) ],
-            [ gmp_init('237852977508946591877284351678975096651401224047304305322504192889595623579202', 10) ],
+            [gmp_init('0A', 16)],
+            [gmp_init('237852977508946591877284351678975096651401224047304305322504192889595623579202', 10)],
         ];
     }
 
