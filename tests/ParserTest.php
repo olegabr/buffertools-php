@@ -94,11 +94,12 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @expectedException \BitWasp\Buffertools\Exceptions\ParserOutOfRange
-     * @expectedExceptionMessage Could not parse string of required length (empty)
      */
     public function testReadBytesEmpty()
     {
+        $this->expectException(\BitWasp\Buffertools\Exceptions\ParserOutOfRange::class);
+        $this->expectExceptionMessage('Could not parse string of required length (empty)');
+
         // Should return false because position is zero,
         // and length is zero.
 
@@ -106,11 +107,12 @@ class ParserTest extends TestCase
         $parser->readBytes(0);
     }
     /**
-     * @expectedException \BitWasp\Buffertools\Exceptions\ParserOutOfRange
-     * @expectedExceptionMessage Could not parse string of required length (empty)
      */
     public function testReadBytesEndOfString()
     {
+        $this->expectException(\BitWasp\Buffertools\Exceptions\ParserOutOfRange::class);
+        $this->expectExceptionMessage('Could not parse string of required length (empty)');
+
         $parser = new Parser('4041414142414141');
         $bytes1 = $parser->readBytes(4);
         $bytes2 = $parser->readBytes(4);
@@ -120,10 +122,11 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testReadBytesBeyondLength()
     {
+        $this->expectException(\Exception::class);
+
         $bytes = '41424344';
         $parser = new Parser($bytes);
         $parser->readBytes(5);

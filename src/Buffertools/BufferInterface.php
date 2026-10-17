@@ -12,7 +12,7 @@ interface BufferInterface
      * @return BufferInterface
      * @throws \Exception
      */
-    public function slice(int $start, int $end = null): BufferInterface;
+    public function slice(int $start, ?int $end = null): BufferInterface;
 
     /**
      * Get the size of the buffer to be returned

@@ -45,22 +45,24 @@ class VarStringTest extends BinaryTest
     }
 
     /**
-     * @expectedException \BitWasp\Buffertools\Exceptions\ParserOutOfRange
-     * @expectedExceptionMessage Insufficient data remaining for VarString
      */
     public function testAbortsWithInvalidVarIntLength()
     {
+        $this->expectException(\BitWasp\Buffertools\Exceptions\ParserOutOfRange::class);
+        $this->expectExceptionMessage('Insufficient data remaining for VarString');
+
         $buffer = new Buffer("\x05\x00");
 
         $varstring = new VarString(new VarInt());
         $varstring->read(new Parser($buffer));
     }
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Must provide a buffer
      */
     public function testFailsWithoutBuffer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Must provide a buffer');
+
         $varstring = new VarString(new VarInt());
         $varstring->write('');
     }

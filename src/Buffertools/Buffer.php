@@ -23,7 +23,7 @@ class Buffer implements BufferInterface
      * @param null|integer         $byteSize
      * @throws \Exception
      */
-    public function __construct(string $byteString = '', int $byteSize = null)
+    public function __construct(string $byteString = '', ?int $byteSize = null)
     {
         if ($byteSize !== null) {
             // Check the integer doesn't overflow its supposed size
@@ -57,10 +57,17 @@ class Buffer implements BufferInterface
      * @return Buffer
      * @throws \Exception
      */
-    public static function hex(string $hexString = '', int $byteSize = null): BufferInterface
+    public static function hex(string $hexString = '', ?int $byteSize = null): BufferInterface
     {
         if (strlen($hexString) > 0 && !ctype_xdigit($hexString)) {
             throw new \InvalidArgumentException('Buffer::hex: non-hex character passed');
+        }
+
+        // pack('H*') pads an odd-length string on the RIGHT ('4a1' -> 4a10), which
+        // changes the value (0x12a05f200, 5e9, became 0x12a05f2000, 5e10). Bitcoin
+        // Core's ParseHex pads on the left instead, so a leading nibble is added.
+        if (0 !== strlen($hexString) % 2) {
+            $hexString = '0' . $hexString;
         }
 
         $binary = pack("H*", $hexString);
@@ -104,7 +111,7 @@ class Buffer implements BufferInterface
      * @return BufferInterface
      * @throws \Exception
      */
-    public function slice(int $start, int $end = null): BufferInterface
+    public function slice(int $start, ?int $end = null): BufferInterface
     {
         if ($start > $this->getSize()) {
             throw new \Exception('Start exceeds buffer length');
@@ -177,8 +184,14 @@ class Buffer implements BufferInterface
      */
     public function getGmp(): \GMP
     {
-        $gmp = gmp_init($this->getHex(), 16);
-        return $gmp;
+        $hex = $this->getHex();
+        // An empty buffer is zero. PHP 8 throws a ValueError for gmp_init(''),
+        // which used to be a silent "0" (and made zero-length DER integers fatal).
+        if ('' === $hex) {
+            return gmp_init(0);
+        }
+
+        return gmp_init($hex, 16);
     }
 
     /**

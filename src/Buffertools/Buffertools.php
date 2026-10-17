@@ -69,7 +69,7 @@ class Buffertools
      * @param int|null        $size
      * @return BufferInterface
      */
-    public static function concat(BufferInterface $buffer1, BufferInterface $buffer2, int $size = null)
+    public static function concat(BufferInterface $buffer1, BufferInterface $buffer2, ?int $size = null)
     {
         return new Buffer($buffer1->getBinary() . $buffer2->getBinary(), $size);
     }
@@ -91,7 +91,7 @@ class Buffertools
      * @param callable|null $convertToBuffer
      * @return array
      */
-    public static function sort(array $items, callable $convertToBuffer = null): array
+    public static function sort(array $items, ?callable $convertToBuffer = null): array
     {
         if (null == $convertToBuffer) {
             $convertToBuffer = function ($value) {

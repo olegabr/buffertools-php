@@ -44,11 +44,12 @@ class BufferTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Byte string exceeds maximum size
      */
     public function testCreateMaxBufferExceeded()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Byte string exceeds maximum size');
+
         $lim = 4;
         Buffer::hex('4141414111', $lim);
     }
@@ -87,6 +88,33 @@ class BufferTest extends TestCase
         // Check Decimal
         $this->assertSame($dec, $buffer->getInt());
         $this->assertInstanceOf(\GMP::class, $buffer->getGmp());
+    }
+
+    /**
+     * PHP 8 throws a ValueError for gmp_init(''), which used to be a silent 0.
+     */
+    public function testEmptyBufferIsZero()
+    {
+        $buffer = Buffer::hex('');
+
+        $this->assertSame('', $buffer->getHex());
+        $this->assertSame('0', $buffer->getInt());
+        $this->assertSame(0, gmp_intval($buffer->getGmp()));
+    }
+
+    /**
+     * pack('H*') pads an odd-length string on the right, which used to turn
+     * 0x12a05f200 (5e9) into 0x12a05f2000 (5e10). Like Bitcoin Core's ParseHex,
+     * the value is padded on the left so the number survives.
+     */
+    public function testOddLengthHexKeepsTheValue()
+    {
+        $buffer = Buffer::hex('12a05f200');
+
+        $this->assertSame('012a05f200', $buffer->getHex());
+        $this->assertSame('5000000000', $buffer->getInt());
+        $this->assertSame(5000000000, gmp_intval($buffer->getGmp()));
+        $this->assertSame(5, $buffer->getSize());
     }
 
     public function testGetSize()

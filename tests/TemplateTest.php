@@ -23,11 +23,12 @@ class TemplateTest extends BinaryTest
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No items in template
      */
     public function testTemplateEmptyParse()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No items in template');
+
         $template = new Template();
         $parser = new Parser('010203040a0b0c0d');
         $template->parse($parser);
@@ -73,7 +74,7 @@ class TemplateTest extends BinaryTest
 
         list ($foundValue, $foundScript) = $template->parse($parser);
 
-        $this->assertInternalType('string', $foundValue);
+        $this->assertIsString($foundValue);
         $this->assertEquals(50000, $foundValue);
         $this->assertEquals($script, $foundScript->getHex());
     }
@@ -94,11 +95,12 @@ class TemplateTest extends BinaryTest
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Number of items must match template
      */
     public function testWriteIncomplete()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Number of items must match template');
+
         $uint64le = new Uint64(ByteOrder::LE);
         $varstring = new VarString(new VarInt());
         $template = new Template([$uint64le, $varstring]);

@@ -28,11 +28,12 @@ class VectorTest extends BinaryTest
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Vector::write() must be supplied with an array
      */
     public function testWriteInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Vector::write() must be supplied with an array');
+
         $varint = new VarInt();
         $vector = new Vector(
             $varint,

@@ -21,7 +21,7 @@ class TemplateFactory
      * @param Template|null $template
      * @param TypeFactoryInterface|null $typeFactory
      */
-    public function __construct(Template $template = null, TypeFactoryInterface $typeFactory = null)
+    public function __construct(?Template $template = null, ?TypeFactoryInterface $typeFactory = null)
     {
         $this->template = $template ?: new Template();
         $this->types = $typeFactory ?: new CachingTypeFactory();

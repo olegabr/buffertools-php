@@ -104,20 +104,22 @@ class UintSetTest extends BinaryTest
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Must pass valid flag for endianness
      */
     public function testUintInvalidOrder()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Must pass valid flag for endianness');
+
         new Uint8(2);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Bit string length must be a multiple of 8
      */
     public function testInvalidFlipLength()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Bit string length must be a multiple of 8');
+
         $u = new Uint8(1);
         $u->flipBits('0');
     }

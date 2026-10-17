@@ -13,22 +13,24 @@ use Mdanter\Ecc\EccFactory;
 class VarIntTest extends BinaryTest
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Integer too large, exceeds 64 bit
      */
     public function testSolveWriteTooLong()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Integer too large, exceeds 64 bit');
+
         $varint = new VarInt();
         $disallowed = gmp_add(gmp_pow(gmp_init(2, 10), 64), gmp_init(1, 10));
         $varint->solveWriteSize($disallowed);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown varint prefix
      */
     public function testSolveReadTooLong()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown varint prefix');
+
         $varint = new VarInt();
         $disallowed = gmp_add(gmp_pow(gmp_init(2, 10), 64), gmp_init(1, 10));
         $varint->solveReadSize($disallowed);
