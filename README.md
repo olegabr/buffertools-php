@@ -3,12 +3,12 @@
 This library provides a `Buffer` and `Parser` class to make dealing with binary data in PHP easier.
 `Templates` extend this by offering a read/write interface for larger serialized structures. 
 
-[![Build Status](https://travis-ci.org/Bit-Wasp/buffertools-php.svg?branch=master)](https://travis-ci.org/Bit-Wasp/buffertools-php)
-[![Code Coverage](https://scrutinizer-ci.com/g/bit-wasp/buffertools-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bit-wasp/buffertools-php/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Bit-Wasp/buffertools-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Bit-Wasp/buffertools-php/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/bitwasp/buffertools/v/stable)](https://packagist.org/packages/bitwasp/buffertools)
-[![Total Downloads](https://poser.pugx.org/bitwasp/buffertools/downloads)](https://packagist.org/packages/bitwasp/buffertools)
-[![License](https://poser.pugx.org/bitwasp/buffertools/license)](https://packagist.org/packages/bitwasp/buffertools)
+This repository is the EthereumICO fork ([olegabr/buffertools-php](https://github.com/olegabr/buffertools-php))
+of [Bit-Wasp/buffertools-php](https://github.com/Bit-Wasp/buffertools-php). It keeps the
+`bitwasp/buffertools` package name and adds PHP 8.x fixes (empty buffers,
+odd-length hex, explicit nullable types).
+
+[![CI](https://github.com/olegabr/buffertools-php/actions/workflows/ci.yml/badge.svg)](https://github.com/olegabr/buffertools-php/actions/workflows/ci.yml)
 
 ## Requirements:
 
@@ -18,7 +18,19 @@ This library provides a `Buffer` and `Parser` class to make dealing with binary 
 
 ## Installation
 
- You can install this library via Composer: `composer require bitwasp/buffertools` 
+ The fork is not published on Packagist, so projects point Composer at the repository:
+
+```json
+{
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/olegabr/buffertools-php" }
+    ],
+    "require": {
+        "bitwasp/buffertools": "^0.5"
+    }
+}
+```
+
   
 ## Examples 
  
